@@ -9,13 +9,23 @@ from telegram.ext import (
 )
 
 # ==================== تنظیمات ====================
-TOKEN = "8731724435:AAF_b0E4i55_YdRfmD8_zXB4b9THwHbTx_4"  # توکن رباتت بزار اینجا
-ADMIN_ID = 8296865861
-GROUP_1 = "https://t.me/amelself55_ch"
-GROUP_2 = "https://t.me/testiamele55"
-GROUP_1_ID = -1003974954656   
-CHANNEL_ID = -1004348597276   
-REQUIRED_CHANNELS = ["@amelselfgap", "@amelself55"]
+TOKEN = os.environ.get("BOT_TOKEN")
+if not TOKEN:
+    raise ValueError("❌ BOT_TOKEN در محیط تنظیم نشده است!")
+
+# آیدی ادمین - از environment variables
+ADMIN_ID = int(os.environ.get("ADMIN_ID", "8296865861"))  # پیش‌فرض برای ایمنی
+
+# آیدی گروه‌ها و کانال - از environment variables
+GROUP_1 = os.environ.get("GROUP_1_LINK", "https://t.me/amelself55_ch")
+GROUP_2 = os.environ.get("GROUP_2_LINK", "https://t.me/testiamele55")
+GROUP_1_ID = int(os.environ.get("GROUP_1_ID", "-1003974954656"))
+CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1004348597276"))
+
+# کانال‌های اجباری برای عضویت - از environment variables
+# مقداردهی به صورت JSON یا با جداکننده خاص
+required_channels_str = os.environ.get("REQUIRED_CHANNELS", "@amelselfgap,@amelself55")
+REQUIRED_CHANNELS = [ch.strip() for ch in required_channels_str.split(",") if ch.strip()]
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -702,8 +712,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
             "🔒 *دسترسی محدود شد!*\n\n"
             "برای ورود به میدان جنگ، باید عضو کانال‌های رسمی بشی:\n\n"
-            "1️⃣ @BloodyWar_Group\n"
-            "2️⃣ @Bloody_War0\n\n"
+            "1️⃣ @AmeleWare55_gp\n"
+            "2️⃣ @AmeleWare55_ch\n\n"
             "بعد از عضویت، دوباره /start بزن تا وارد بازی بشی! ⚔️",
             disable_web_page_preview=True,
             parse_mode="Markdown"
